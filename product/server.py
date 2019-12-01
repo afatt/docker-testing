@@ -7,13 +7,17 @@ class Echo(protocol.Protocol):
     """This is just about the simplest possible protocol"""
 
     def dataReceived(self, data):
-        self.callThis()
+        data = self.callThis()
+        data = bytes(data, 'utf8')
         self.transport.write(data)
 
     def callThis(self):
         with working_directory('./test'):
             with open('test.csv') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
+                for row in csv_reader:
+                    print(row[0])
+        return row[0]
 
 @contextmanager
 def working_directory(directory):
