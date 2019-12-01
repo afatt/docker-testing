@@ -1,13 +1,29 @@
 from twisted.internet import reactor, protocol
-
+import csv
+from contextlib import contextmanager
 
 class Echo(protocol.Protocol):
     """This is just about the simplest possible protocol"""
 
     def dataReceived(self, data):
-        "As soon as any data is received, write it back."
         self.transport.write(data)
 
+    def callThis():
+        with working_directory('./test'):
+            with open('test.csv') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+
+@contextmanager
+def working_directory(directory):
+    '''Decorator that defines a directory iterator, reverts back to original
+       directory when the iterator is complete
+    '''
+    owd = os.getcwd()
+    try:
+        os.chdir(directory)
+        yield directory
+    finally:
+        os.chdir(owd)
 
 def main():
     """This runs the protocol on port 8000"""
