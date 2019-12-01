@@ -1,4 +1,5 @@
 from twisted.internet import reactor, protocol
+import os
 import csv
 from contextlib import contextmanager
 
@@ -6,9 +7,10 @@ class Echo(protocol.Protocol):
     """This is just about the simplest possible protocol"""
 
     def dataReceived(self, data):
+        self.callThis()
         self.transport.write(data)
 
-    def callThis():
+    def callThis(self):
         with working_directory('./test'):
             with open('test.csv') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
